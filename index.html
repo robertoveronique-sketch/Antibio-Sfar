@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F1B1A">
+<title>Antibioprophylaxie SFAR</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1B1A;
+    --surface:#16302C;
+    --surface-2:#1C3B36;
+    --line:#264B44;
+    --teal:#4FD1C5;
+    --teal-dim:#2E7A70;
+    --amber:#E0A458;
+    --text:#F2F5F4;
+    --text-dim:#9DB3AF;
+    --danger:#E08A6B;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+  .app{max-width:640px; margin:0 auto; min-height:100dvh; display:flex; flex-direction:column;}
+
+  /* top bar */
+  header.topbar{
+    position:sticky; top:0; z-index:5;
+    background:linear-gradient(180deg, rgba(15,27,26,0.98), rgba(15,27,26,0.90));
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:calc(env(safe-area-inset-top) + 14px) 16px 12px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .backbtn{
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--surface-2); border:1px solid var(--line);
+    color:var(--teal); flex:none; text-decoration:none;
+  }
+  .backbtn svg{width:18px; height:18px;}
+  .topbar h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:600;
+    font-size:17px; margin:0; line-height:1.25;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .topbar .eyebrow{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--teal); margin-bottom:2px;
+  }
+
+  main{flex:1; padding:14px 16px 40px;}
+
+  /* home hero */
+  .hero{
+    padding:18px 4px 22px;
+  }
+  .hero .brand{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:26px;
+    letter-spacing:-0.01em; margin:0 0 4px;
+  }
+  .hero .brand em{font-style:normal; color:var(--teal);}
+  .hero p{color:var(--text-dim); font-size:13.5px; line-height:1.5; margin:0;}
+  .hero .rx{
+    margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    color:var(--text-dim); border-left:2px solid var(--teal-dim); padding-left:10px;
+  }
+
+  .catlist{display:flex; flex-direction:column; gap:10px;}
+  .catcard{
+    display:flex; align-items:center; gap:12px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 14px; text-decoration:none; color:var(--text);
+    position:relative; overflow:hidden;
+  }
+  .catcard::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+    background:var(--teal);
+  }
+  .catcard.unverified::before{background:var(--amber);}
+  .catcard .idx{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-dim);
+    width:26px; flex:none;
+  }
+  .catcard .cinfo{flex:1; min-width:0;}
+  .catcard .cname{font-weight:600; font-size:15px;}
+  .catcard .ccount{font-size:12px; color:var(--text-dim); margin-top:2px;}
+  .badge{
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.05em;
+    padding:3px 7px; border-radius:6px; flex:none; text-transform:uppercase;
+  }
+  .badge.ok{background:rgba(79,209,197,0.14); color:var(--teal);}
+  .badge.warn{background:rgba(224,164,88,0.16); color:var(--amber);}
+  .chev{color:var(--text-dim); flex:none;}
+
+  /* procedure list */
+  .plist{display:flex; flex-direction:column; gap:8px;}
+  .pitem{
+    display:flex; align-items:center; gap:10px;
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:12px 12px; text-decoration:none; color:var(--text);
+  }
+  .pitem .pname{font-weight:600; font-size:14px; line-height:1.35;}
+  .pitem .pind{font-size:12px; color:var(--text-dim); margin-top:3px; line-height:1.35;}
+  .pitem .molpreview{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--teal);
+    margin-top:6px;
+  }
+
+  .searchbox{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:10px 12px; margin-bottom:14px;
+  }
+  .searchbox input{
+    background:none; border:none; outline:none; color:var(--text);
+    font-family:'Inter',sans-serif; font-size:14px; width:100%;
+  }
+  .searchbox input::placeholder{color:var(--text-dim);}
+  .searchbox svg{color:var(--text-dim); flex:none;}
+
+  /* detail view */
+  .procTitle{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; line-height:1.3; margin:2px 0 4px;}
+  .procInd{color:var(--text-dim); font-size:13.5px; line-height:1.5; margin-bottom:18px;}
+
+  .rxlabel{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; margin-bottom:14px; position:relative;
+  }
+  .rxlabel.allergy{border-color:rgba(224,164,88,0.4);}
+  .rxlabel .rxhead{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+  }
+  .rxlabel .rxhead .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--teal);
+  }
+  .rxlabel.allergy .rxhead .tag{color:var(--amber);}
+  .rxlabel .molname{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16.5px;}
+  .rxgrid{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;
+    border-top:1px dashed var(--line); padding-top:12px; margin-top:2px;
+  }
+  .rxgrid .field{display:flex; flex-direction:column; gap:3px;}
+  .rxgrid .field.full{grid-column:1 / -1;}
+  .rxgrid .flabel{
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--text-dim);
+  }
+  .rxgrid .fval{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text); line-height:1.4;}
+
+  .notesbox{
+    background:var(--surface-2); border-radius:12px; padding:13px 14px;
+    font-size:13px; line-height:1.55; color:var(--text-dim); margin-bottom:14px;
+  }
+  .notesbox b{color:var(--text);}
+
+  .sourceline{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-dim);
+    text-align:center; margin-top:6px;
+  }
+  .verifynote{
+    display:flex; gap:8px; align-items:flex-start;
+    background:rgba(224,164,88,0.1); border:1px solid rgba(224,164,88,0.3);
+    border-radius:12px; padding:11px 13px; font-size:12px; color:var(--amber);
+    line-height:1.5; margin-bottom:14px;
+  }
+  .verifynote svg{flex:none; margin-top:1px;}
+
+  .noantibio{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; text-align:center; margin-bottom:14px;
+  }
+  .noantibio .big{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;}
+
+  footer.footfoot{padding:20px 16px 30px; text-align:center;}
+  footer.footfoot p{font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; line-height:1.6;}
+
+  ::-webkit-scrollbar{width:0; height:0;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const app = document.getElementById('app');
+
+  function esc(s){
+    if(s===null||s===undefined) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function molBlock(m, isAllergy){
+    if(!m) return '';
+    return `
+      <div class="rxlabel ${isAllergy?'allergy':''}">
+        <div class="rxhead">
+          <span class="tag">${isAllergy ? 'Si allergie aux bêta-lactamines' : '1er choix'}</span>
+        </div>
+        <div class="molname">${esc(m.molecule)}</div>
+        <div class="rxgrid">
+          <div class="field"><span class="flabel">Dose</span><span class="fval">${esc(m.dose)}</span></div>
+          <div class="field"><span class="flabel">Voie</span><span class="fval">${esc(m.route)}</span></div>
+          <div class="field full"><span class="flabel">Délai d'administration</span><span class="fval">${esc(m.timing)}</span></div>
+          <div class="field full"><span class="flabel">Réinjection</span><span class="fval">${esc(m.reinjection)}</span></div>
+        </div>
+      </div>`;
+  }
+
+  function renderHome(){
+    const cats = window.SFAR_DATA.categories;
+    const rows = cats.map((c,i)=>{
+      const badge = c.verified ? '<span class="badge ok">Vérifié</span>' : '<span class="badge warn">À vérifier</span>';
+      return `
+      <a class="catcard ${c.verified?'':'unverified'}" href="#/cat/${c.id}">
+        <span class="idx">${String(i+1).padStart(2,'0')}</span>
+        <span class="cinfo">
+          <span class="cname">${esc(c.label)}</span>
+          <span class="ccount">${c.procedures.length} acte${c.procedures.length>1?'s':''}</span>
+        </span>
+        ${badge}
+        <span class="chev">›</span>
+      </a>`;
+    }).join('');
+
+    app.innerHTML = `
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Référence peropératoire</span>
+          <h1>Antibioprophylaxie</h1>
+        </div>
+      </header>
+      <main>
+        <div class="hero">
+          <p class="brand">SFAR <em>Antibio</em>guide</p>
+          <p>Antibioprophylaxie chirurgicale par spécialité, molécule, dose et délai d'administration.</p>
+          <div class="rx">${esc(window.SFAR_DATA.source)}</div>
+        </div>
+        <div class="catlist">${rows}</div>
+      </main>
+      <footer class="footfoot">
+        <p>Outil d'aide à la décision — ne remplace pas le jugement clinique et le protocole local.<br>Vérifier systématiquement l'allergie et le poids du patient.</p>
+      </footer>
+    `;
+  }
+
+  function renderCategory(catId){
+    const cat = window.SFAR_DATA.categories.find(c=>c.id===catId);
+    if(!cat){ location.hash = '#/'; return; }
+
+    app.innerHTML = `
+      <header class="topbar">
+        <a class="backbtn" href="#/" aria-label="Retour">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div>
+          <span class="eyebrow">${cat.verified?'Vérifié':'À vérifier'}</span>
+          <h1>${esc(cat.label)}</h1>
+        </div>
+      </header>
+      <main id="catmain"></main>
+    `;
+
+    const main = document.getElementById('catmain');
+
+    function renderList(filter){
+      const f = (filter||'').toLowerCase().trim();
+      const items = cat.procedures.filter(p =>
+        !f || (p.procedure+' '+p.indication).toLowerCase().includes(f)
+      );
+      const rows = items.map((p)=>{
+        const idx = cat.procedures.indexOf(p);
+        const preview = p.standard ? p.standard.molecule : 'Pas d\'antibioprophylaxie';
+        return `
+        <a class="pitem" href="#/cat/${cat.id}/${idx}">
+          <span style="flex:1; min-width:0;">
+            <span class="pname">${esc(p.procedure)}</span>
+            <span class="pind">${esc(p.indication)}</span>
+            <span class="molpreview">${esc(preview)}</span>
+          </span>
+          <span class="chev">›</span>
+        </a>`;
+      }).join('') || `<div class="notesbox">Aucun acte ne correspond à la recherche.</div>`;
+
+      main.querySelector('.plist').innerHTML = rows;
+    }
+
+    main.innerHTML = `
+      ${!cat.verified ? `<div class="verifynote"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86l-8.18 14.18A2 2 0 0 0 3.83 21h16.34a2 2 0 0 0 1.72-2.96L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><span>Données reprises de l'application d'origine, pas encore recontrôlées ligne à ligne contre la RFE SFAR-SPILF 2024. Vérifiez avant usage clinique.</span></div>` : ''}
+      <div class="searchbox">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="searchInput" placeholder="Rechercher un acte…" autocomplete="off">
+      </div>
+      <div class="plist"></div>
+    `;
+
+    renderList('');
+    document.getElementById('searchInput').addEventListener('input', e=>renderList(e.target.value));
+  }
+
+  function renderProcedure(catId, idx){
+    const cat = window.SFAR_DATA.categories.find(c=>c.id===catId);
+    if(!cat){ location.hash = '#/'; return; }
+    const p = cat.procedures[idx];
+    if(!p){ location.hash = `#/cat/${catId}`; return; }
+
+    const noAntibio = !p.standard && !p.allergy;
+
+    app.innerHTML = `
+      <header class="topbar">
+        <a class="backbtn" href="#/cat/${cat.id}" aria-label="Retour">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div>
+          <span class="eyebrow">${esc(cat.label)}</span>
+          <h1>Détail de l'acte</h1>
+        </div>
+      </header>
+      <main>
+        <p class="procTitle">${esc(p.procedure)}</p>
+        <p class="procInd">${esc(p.indication)}</p>
+
+        ${!cat.verified ? `<div class="verifynote"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86l-8.18 14.18A2 2 0 0 0 3.83 21h16.34a2 2 0 0 0 1.72-2.96L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><span>Non encore revérifié contre la RFE 2024 — confirmer avant application clinique.</span></div>` : ''}
+
+        ${noAntibio ? `<div class="noantibio"><div class="big">Pas d'antibioprophylaxie recommandée</div></div>` : ''}
+        ${molBlock(p.standard, false)}
+        ${molBlock(p.allergy, true)}
+
+        ${p.notes ? `<div class="notesbox"><b>Remarques —</b> ${esc(p.notes)}</div>` : ''}
+        ${p.sourcePage ? `<div class="sourceline">RFE SFAR-SPILF 2024 · p.${esc(p.sourcePage)}</div>` : ''}
+      </main>
+      <footer class="footfoot">
+        <p>Toujours confirmer l'allergie, le poids et la durée d'intervention avant administration.</p>
+      </footer>
+    `;
+  }
+
+  function route(){
+    const h = location.hash || '#/';
+    const parts = h.replace(/^#\//,'').split('/').filter(Boolean);
+    if(parts.length===0){ renderHome(); return; }
+    if(parts[0]==='cat' && parts[1] && parts[2]===undefined){ renderCategory(parts[1]); return; }
+    if(parts[0]==='cat' && parts[1] && parts[2]!==undefined){ renderProcedure(parts[1], parseInt(parts[2],10)); return; }
+    renderHome();
+  }
+
+  window.addEventListener('hashchange', route);
+  window.addEventListener('DOMContentLoaded', route);
+  route();
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', ()=>{
+      navigator.serviceWorker.register('sw.js').catch(()=>{});
+    });
+  }
+})();
+</script>
+</body>
+</html>
